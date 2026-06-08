@@ -14,7 +14,7 @@ The repository is designed to be reproducible across systems. All internal paths
 ## 2. Repository Structure
 
 ```
-SCENES/
+TabandehEtAl_iScience_2026/
 ├── code/
 │   ├── utils/
 │   │   ├── __init__.py
@@ -75,16 +75,16 @@ dataset_dir/
 │   └── wp_derivatives/
 │       ├── wp690_YYYYMMDDTHHMM.npz
 │       └── ...
-└── data/
-    └── jeti_metadata_summary_tidy_scenes.csv
+└── metadata/
+    └── SCENES_metadata_v1.0.0.xlsx
 ```
-4. Open `WP_derivatives.ipynb` and update the `dataset_dir` variable to point to the root directory of the organized dataset.
+4. Open `WP_derivatives.ipynb` and update the `dataset_dir` variable to point to the local dataset location.
 
 ```
 dataset_dir = "path/to/your/dataset"
 ```
 
-Each `.npz` file contains multiple 2D NumPy arrays (lcone', 'mcone', 'scone', 'rhodopic', 'iprgc', 'luminance', 'trix', 'triz', 'stdred', 'stdgreen', 'stdblue').
+Each `.npz` file consists of 11 NumPy arrays (lcone', 'mcone', 'scone', 'rhodopic', 'iprgc', 'luminance', 'trix', 'triz', 'stdred', 'stdgreen', 'stdblue').
 
 ---
 
@@ -140,7 +140,7 @@ Generated outputs are saved in:
 ## 8. Reproducibility Notes
 
 - Users must update `dataset_dir`
-- Folder structure must remain unchanged
+- Folder structures must remain unchanged for repository and external dataset
 - Code uses OS-independent path handling (`os.path`)
 - Jupyter outputs may change but do not affect results
 
