@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-This  Python code repository contains code, processed data, and output materials for the spatial analysis conducted in the SCENES project.
+This Python code repository contains code, analysis, and output materials for the publication **"Photoreceptor-specific scene statistics reveal melanopic structure in natural environments"** DOI: https://www.biorxiv.org/content/10.1101/2025.11.10.687567v2
 
 If you have any comments or queries, please reach out to us at [Niloufar Tabandeh](mailto:niloufar.tabandehsaravi@tum.de) and [Manuel Spitschan](mailto:manuel.spitschan@tum.de).
 
@@ -43,7 +43,7 @@ TabandehEtAl_iScience_2026/
 
 - `code/`: Main analysis notebooks and utility functions  
 - `code/utils/`: Reusable functions for analysis  
-- `data/`: Small\local dataset to integrate metadata and spectral metrics
+- `data/`: Small\local dataset to integrate metadata and spectral metrics and figure 5 that generated with PowerPoint
 - `results/`: Output directory for figures and tables  
 - `environment.yml`: Conda virtual environment specification  
 
@@ -64,19 +64,23 @@ conda activate spatialstatistics_env
 
 Due to the large size of the derivatives dataset, it is deposited in an open data repository [SCENES derivatives](https://doi.org/10.17617/3.NX2H2U). The following steps must be completed before running the code.
 
-1. Navigate to the data repository and download all `wp_derivative..` archive parts. Extract all parts into a single folder so that the contents are reconstructed correctly.
+1. Navigate to the data repository and download all compressed files:`wp_derivative.` archive parts and `gopro_derivatives_v1.0.0.7z` . Extract all `wp_derivative.` parts into a single folder so that the contents are reconstructed correctly.
 
-2. Download the metadata file and place it in `metadata` folder.
+2. Download the SCENES_metadata_v1.0.0.xlsx and place it in `metadaat` folder.
 
 3. Organize the files according to the following data tree structure:
 ```
 dataset_dir/
 ├── derivatives/
-│   └── wp_derivatives/
-│       ├── wp690_YYYYMMDDTHHMM.npz
+│   ├── wp_derivaties/
+│   │   ├── wp690_YYYYMMDDTHHMM.npz
+│   │   └── ...
+│   └── gopro_derivatives/
+│       ├── gopro10photo_undistorted_YYYYMMDDTHHMM.JPG
 │       └── ...
-└── metadata/
-    └── SCENES_metadata_v1.0.0.xlsx
+├── metadata/
+│   ├── SCENES_metadata_v1.0.0.xlsx
+└──  
 ```
 4. Open `WP_derivatives.ipynb` and update the `dataset_dir` variable to point to the local dataset location.
 
@@ -105,6 +109,8 @@ results_dir = os.path.join("..", "results")
 ---
 
 ## 6. Workflow
+
+First run the `wp_derivatives` notebook. This notebook performs the underlying analyses required to generate the intermediate statistics and figures used by the `SCENES_spatial_analysis_paper` notebook. After it has finished, run the `SCENES_spatial_analysis_paper` notebook as the next step.
 
 ### 6.1 WP_derivatives.ipynb
 
