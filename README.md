@@ -24,6 +24,8 @@ TabandehEtAl_iScience_2026/
 │   └── WP_derivatives.ipynb
 ├── data/
 │   ├── jeti_metadata_summary_tidy_scenes.csv
+    ├── merged_wp_jeti_metadata_df.csv
+    └── ...
 ├── results/
 │   ├── figures/
 │   │   ├── Figure1.pdf
@@ -82,7 +84,7 @@ dataset_dir/
 │   ├── SCENES_metadata_v1.0.0.xlsx
 └──  
 ```
-4. Open `WP_derivatives.ipynb` and update the `dataset_dir` variable to point to the local dataset location.
+4. Open `WP_derivatives.ipynb` and `SCENES_spatial_analysis_paper.ipynb` and update the `dataset_dir` variable to point to the local dataset location.
 
 ```
 dataset_dir = "path/to/your/dataset"
@@ -132,13 +134,13 @@ First run the `wp_derivatives` notebook. This notebook performs the underlying a
 Generated outputs are saved in:
 
 - `results/figures/`
-    All final Figure1 to 7 in .png and .pdf formats stored here. In addition, the supplemantary `Figure_sup` is also stored here.
+    All final Figure 1 to 7 in .png and .pdf formats stored here. In addition, the supplemantary `Figure_sup` is also stored here.
 
 - `results/tables/`:
     central statistics for spectral data : `jeti_statistics_overall.csv`, `jeti_statistics_per_view.csv`
     central statistics for radiance maps: `wp_statistics_overall.csv`, `wp_statistics_per_view.csv`
     overexposed pixels of radiance maps: `overexposed_percentage_per_view.csv`
-    derived metrics of radiance maps: `merged_wp_jeti_metadata_df.csv`
+    derived metrics of radiance maps: `merged_df.csv`, `average_pixels_correlation_df.csv`
     amplitude spectra per view: `amplitude_spectra_regression_view_df.csv`
 
 ---
