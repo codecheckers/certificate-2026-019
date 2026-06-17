@@ -1,0 +1,26 @@
+version: https://codecheck.org.uk/spec/config/1.0/
+certificate: 2026-019
+report: https://doi.org/10.5281/zenodo.{placeholder}
+
+paper:
+  title: Photoreceptor-specific scene statistics reveal melanopic structure in natural environments
+  authors:
+    - name: Niloufar Tabandeh
+      ORCID: 0000-0002-7971-8589
+    - name: Manuel Spitschan
+      ORCID: 0000-0002-8572-9268
+  reference: https://doi.org/10.1101/2025.11.10.687567
+
+repository: https://github.com/tscnlab/TabandehEtAl_iScience_2026
+check_time: "2026-06-15T14:00:00"
+summary: TODO add summary
+
+codechecker:
+  - name: Jan Haacker
+    ORCID: 0000-0002-5464-2442
+  - name: SOMEONE ELSE FIXME
+    ORCID: 0123-4567-8910-1112 FIXME
+
+manifest:
+  - file: example_output.txt FIXME
+    comment: Example output file - replace with actual outputs FIXME
