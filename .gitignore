@@ -37,3 +37,16 @@ Thumbs.db
 # Ignore IDE/project settings
 .vscode/
 .idea/
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+# snakemake cache
+.snakemake
+
+# Ignore local workflow secrets and downloaded SCENES derivatives
+/codecheck/workflow/.env/
+/data/downloads/
+/data/derivatives/
+/data/metadata/SCENES_metadata_v1.0.0.xlsx
