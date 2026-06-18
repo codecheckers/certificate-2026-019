@@ -175,7 +175,7 @@ def token_command():
     )
 
 
-rule all:
+rule prepare:
     input:
         str(GOPRO_SENTINEL),
         str(WP_PREP_SENTINEL),
@@ -267,6 +267,11 @@ rule run_wp:
         str(WP_NOTEBOOK)
 
 
+rule first_nb:
+    input:
+        str(WP_DONE_SENTINEL)
+
+
 rule run_scenes:
     input:
         str(GOPRO_SENTINEL),
@@ -282,3 +287,8 @@ rule run_scenes:
         data_dir=str(DATA_ROOT.resolve())
     notebook:
         str(SCENES_NOTEBOOK)
+
+
+rule second_nb:
+    input:
+        str(SCENES_DONE_SENTINEL)
