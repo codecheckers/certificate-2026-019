@@ -1,0 +1,12 @@
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - pandas
+  - seaborn
+  - matplotlib
+  - scipy
+  - cmcrameri
+  - ipykernel
+  - papermill
