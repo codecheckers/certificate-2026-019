@@ -265,3 +265,20 @@ rule run_wp:
         data_dir=str(DATA_ROOT.resolve())
     notebook:
         str(WP_NOTEBOOK)
+
+
+rule run_scenes:
+    input:
+        str(GOPRO_SENTINEL),
+        str(WP_DONE_SENTINEL)
+    output:
+        str(SCENES_DONE_SENTINEL)
+    conda:
+        "envs/notebooks.yml"
+    log:
+        notebook="<logs>/" + SCENES_NOTEBOOK.name
+    params:
+        repo_root=str(REPO_ROOT.resolve()),
+        data_dir=str(DATA_ROOT.resolve())
+    notebook:
+        str(SCENES_NOTEBOOK)
