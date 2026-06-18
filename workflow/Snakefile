@@ -219,7 +219,7 @@ rule extract_gopro:
     shell:
         """
         mkdir -p {GOPRO_DIR}
-        7z x -y -o{GOPRO_DIR} {input.archive}
+        7z x -y -o{GOPRO_DIR}/.. {input.archive}  # `/..` not tested
         """
 
 
@@ -233,5 +233,5 @@ rule extract_wp:
     shell:
         """
         mkdir -p {WP_DIR}
-        7z x -y -o{WP_DIR} {input.first_part}
+        7z x -y -o{WP_DIR}/.. {input.first_part}  # `/..` not tested
         """
