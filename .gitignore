@@ -42,8 +42,10 @@ Thumbs.db
 .pixi/*
 !.pixi/config.toml
 
-# snakemake cache
+# snakemake cache and output
 .snakemake
+/workflow/logs/
+/workflow/resources/
 
 # Ignore local workflow secrets and downloaded SCENES derivatives
 /codecheck/workflow/.env/

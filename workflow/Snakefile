@@ -16,9 +16,11 @@ TODO:
 from pathlib import Path
 import os
 
+WORKFLOW_ROOT = Path(workflow.basedir)
+REPO_ROOT = WORKFLOW_ROOT.parent
 
 DATAVERSE_BASE_URL = "https://edmond.mpg.de/api/access/datafile"
-TOKEN_FILE = Path(workflow.basedir) / ".env" / "edmond_api_token"
+TOKEN_FILE = WORKFLOW_ROOT / ".env" / "edmond_api_token"
 
 DATA_ROOT = Path("data")
 DOWNLOAD_DIR = DATA_ROOT / "downloads"
@@ -29,8 +31,20 @@ METADATA_DIR = DATA_ROOT / "metadata"
 CHECKSUM_FILE = DOWNLOAD_DIR / "SCENES_derivatives_SHA256SUMS_v1.0.0.txt"
 METADATA_FILE = METADATA_DIR / "SCENES_metadata_v1.0.0.xlsx"
 GOPRO_SENTINEL = GOPRO_DIR / ".extracted"
-WP_SENTINEL = WP_DIR / ".extracted"
+WP_PREP_SENTINEL = WP_DIR / ".extracted"
 CHECKSUM_SENTINEL = DOWNLOAD_DIR / ".sha256_checked"
+
+RESULTS_ROOT = Path("results")
+WP_DONE_SENTINEL = RESULTS_ROOT / "tables" / "amplitude_spectra_regression_view_df.csv"
+SCENES_DONE_SENTINEL = RESULTS_ROOT / "figures" / "Figure_sup.pdf"
+
+CODE_ROOT = REPO_ROOT / "code"
+WP_NOTEBOOK = CODE_ROOT / "WP_derivatives.ipynb"
+SCENES_NOTEBOOK = CODE_ROOT / "SCENES_spatial_analysis_paper.ipynb"
+
+pathvars:
+    logs=str(WORKFLOW_ROOT / "logs"),
+    resources=str(WORKFLOW_ROOT / "resources")
 
 FILES = {
     "gopro": {
@@ -161,22 +175,22 @@ def token_command():
     )
 
 
-rule all:
+rule prepare:
     input:
         str(GOPRO_SENTINEL),
-        str(WP_SENTINEL),
+        str(WP_PREP_SENTINEL),
         str(METADATA_FILE)
 
 
 rule download_file:
     output:
-        "{download_dir}/{filename}"
+        "{DOWNLOAD_DIR}/{{filename}}"
     params:
         file_id=lambda wildcards, output: DOWNLOAD_TO_ID[output[0]],
         token=token_command()
     shell:
         """
-        mkdir -p {wildcards.download_dir}
+        mkdir -p {DOWNLOAD_DIR}
         {params.token}
         curl -fL --retry 5 \
           -H "X-Dataverse-key: $token" \
@@ -229,9 +243,52 @@ rule extract_wp:
         parts=WP_PARTS,
         verified=str(CHECKSUM_SENTINEL)
     output:
-        touch(str(WP_SENTINEL))
+        touch(str(WP_PREP_SENTINEL))
     shell:
         """
         mkdir -p {WP_DIR}
         7z x -y -o{WP_DIR}/.. {input.first_part}  # `/..` not tested
         """
+
+
+rule run_wp:
+    input:
+        str(WP_PREP_SENTINEL)
+    output:
+        str(WP_DONE_SENTINEL)
+    conda:
+        "envs/notebooks.yml"
+    log:
+        notebook="<logs>/" + WP_NOTEBOOK.name
+    params:
+        repo_root=str(REPO_ROOT.resolve()),
+        data_dir=str(DATA_ROOT.resolve())
+    notebook:
+        str(WP_NOTEBOOK)
+
+
+rule first_nb:
+    input:
+        str(WP_DONE_SENTINEL)
+
+
+rule run_scenes:
+    input:
+        str(GOPRO_SENTINEL),
+        str(WP_DONE_SENTINEL)
+    output:
+        str(SCENES_DONE_SENTINEL)
+    conda:
+        "envs/notebooks.yml"
+    log:
+        notebook="<logs>/" + SCENES_NOTEBOOK.name
+    params:
+        repo_root=str(REPO_ROOT.resolve()),
+        data_dir=str(DATA_ROOT.resolve())
+    notebook:
+        str(SCENES_NOTEBOOK)
+
+
+rule second_nb:
+    input:
+        str(SCENES_DONE_SENTINEL)
