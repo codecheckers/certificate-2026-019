@@ -1,0 +1,237 @@
+"""Code checking support workflow
+
+This workflow covers downloading the compressed files, checking those,
+and extracting their contents into the required structure. It is not
+build to be fail-safe - view it as custom helper.
+
+The workflow is build for Linux machines and may also work on other
+UNIX-based systems.
+
+TODO:
+
+- wrap in mktemp ... mv
+- pipe output to logs
+"""
+
+from pathlib import Path
+import os
+
+
+DATAVERSE_BASE_URL = "https://edmond.mpg.de/api/access/datafile"
+TOKEN_FILE = Path(workflow.basedir) / ".env" / "edmond_api_token"
+
+DATA_ROOT = Path("data")
+DOWNLOAD_DIR = DATA_ROOT / "downloads"
+GOPRO_DIR = DATA_ROOT / "derivatives" / "gopro_derivatives"
+WP_DIR = DATA_ROOT / "derivatives" / "wp_derivatives"
+METADATA_DIR = DATA_ROOT / "metadata"
+
+CHECKSUM_FILE = DOWNLOAD_DIR / "SCENES_derivatives_SHA256SUMS_v1.0.0.txt"
+METADATA_FILE = METADATA_DIR / "SCENES_metadata_v1.0.0.xlsx"
+GOPRO_SENTINEL = GOPRO_DIR / ".extracted"
+WP_SENTINEL = WP_DIR / ".extracted"
+CHECKSUM_SENTINEL = DOWNLOAD_DIR / ".sha256_checked"
+
+FILES = {
+    "gopro": {
+        "id": 340039,
+        "filename": "gopro_derivatives_v1.0.0.7z",
+        "download": DOWNLOAD_DIR / "gopro_derivatives_v1.0.0.7z",
+        "sha256": "FD80DE277B30B9402DC6A77110B52FA30BFF5E6BE67C18AEE01C69303471B7D9",
+    },
+    "metadata": {
+        "id": 340135,
+        "filename": "SCENES_metadata_v1.0.0.xlsx",
+        "download": DOWNLOAD_DIR / "SCENES_metadata_v1.0.0.xlsx",
+    },
+    "checksums": {
+        "id": 343676,
+        "filename": "SCENES_derivatives_SHA256SUMS_v1.0.0.txt",
+        "download": CHECKSUM_FILE,
+    },
+    "wp_001": {
+        "id": 343677,
+        "filename": "wp_derivatives_v1.0.0.7z.001",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.001",
+        "sha256": "B2EA8E49A09B6C85EB6F2084A2F517EB196A918ECE35F7523AA16200E43BDDA3",
+    },
+    "wp_002": {
+        "id": 343678,
+        "filename": "wp_derivatives_v1.0.0.7z.002",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.002",
+        "sha256": "7AB2207A98A2062758CAB92CDE9C68A980451B8FDFEB8573B33CE55A86F9ED5E",
+    },
+    "wp_003": {
+        "id": 343679,
+        "filename": "wp_derivatives_v1.0.0.7z.003",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.003",
+        "sha256": "5813A8E995AE199C536E25564F44F7899379A5720913CB5EC6B598132B92C2DA",
+    },
+    "wp_004": {
+        "id": 343682,
+        "filename": "wp_derivatives_v1.0.0.7z.004",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.004",
+        "sha256": "574CEAD4FA520D44BD3684816336FECD5A26B9DF618E0300E0261EC0F10F157C",
+    },
+    "wp_005": {
+        "id": 343686,
+        "filename": "wp_derivatives_v1.0.0.7z.005",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.005",
+        "sha256": "C67201889F08B40FD70711AF865985BCC6CCD433E9E12DEB0DF838C2289B9FEE",
+    },
+    "wp_006": {
+        "id": 343710,
+        "filename": "wp_derivatives_v1.0.0.7z.006",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.006",
+        "sha256": "B7578F909D5B278F03738DD2BF943AB9317CB2BDA63E14D11896E1C443BF778D",
+    },
+    "wp_007": {
+        "id": 343709,
+        "filename": "wp_derivatives_v1.0.0.7z.007",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.007",
+        "sha256": "7D96F3D46BC0D61C740D94264B21329E9C412458A07CE1197AE43798A0C12DEC",
+    },
+    "wp_008": {
+        "id": 343711,
+        "filename": "wp_derivatives_v1.0.0.7z.008",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.008",
+        "sha256": "D1CDE2CA19A33AED8DE19566D284DB66EB9229ADB04757DA90F62FD97436F9A4",
+    },
+    "wp_009": {
+        "id": 343712,
+        "filename": "wp_derivatives_v1.0.0.7z.009",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.009",
+        "sha256": "9B0C68CF8CC32367D5B70D2E0F1A57C074CE86D7EF789CB86B0C6DED3E0BDA60",
+    },
+    "wp_010": {
+        "id": 343715,
+        "filename": "wp_derivatives_v1.0.0.7z.010",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.010",
+        "sha256": "D3C47ABF2733637E1989F41B7D07C22EAAFA4A46C32B75BC8E12FDC2C0AE8EAB",
+    },
+    "wp_011": {
+        "id": 343713,
+        "filename": "wp_derivatives_v1.0.0.7z.011",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.011",
+        "sha256": "8B469784D62988839CBB7081B13FD9C512939EE43C7EED09EE1A7EC6392A3C3E",
+    },
+    "wp_012": {
+        "id": 343716,
+        "filename": "wp_derivatives_v1.0.0.7z.012",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.012",
+        "sha256": "EC88430615E1D7822C331E5DEA092D8CCB59A6576D0DB510C2B4C99481B32527",
+    },
+    "wp_013": {
+        "id": 343717,
+        "filename": "wp_derivatives_v1.0.0.7z.013",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.013",
+        "sha256": "AF7B5A96DB8379CEC6E9A76B6E1E163FA28D1AB735193CCC4D106DEA824693C5",
+    },
+    "wp_014": {
+        "id": 343714,
+        "filename": "wp_derivatives_v1.0.0.7z.014",
+        "download": DOWNLOAD_DIR / "wp_derivatives_v1.0.0.7z.014",
+        "sha256": "AB5C5CE353CD1F269E1A57F2F14387118736A2A14A059CC5226609156DBEFB47",
+    },
+}
+
+ARCHIVE_DOWNLOADS = [
+    str(entry["download"])
+    for entry in FILES.values()
+    if "sha256" in entry
+]
+WP_PARTS = [
+    str(FILES[f"wp_{part:03d}"]["download"])
+    for part in range(1, 15)
+]
+DOWNLOAD_TO_ID = {
+    str(entry["download"]): entry["id"]
+    for entry in FILES.values()
+}
+
+
+def token_command():
+    if os.environ.get("EDMOND_API_TOKEN"):
+        return "token=\"$EDMOND_API_TOKEN\""
+    if TOKEN_FILE.exists() and TOKEN_FILE.read_text().strip():
+        return f"token=\"$(cat {TOKEN_FILE})\""
+    raise WorkflowError(
+        "Missing Edmond API token. Set EDMOND_API_TOKEN or write the token to "
+        f"{TOKEN_FILE}."
+    )
+
+
+rule all:
+    input:
+        str(GOPRO_SENTINEL),
+        str(WP_SENTINEL),
+        str(METADATA_FILE)
+
+
+rule download_file:
+    output:
+        "{download_dir}/{filename}"
+    params:
+        file_id=lambda wildcards, output: DOWNLOAD_TO_ID[output[0]],
+        token=token_command()
+    shell:
+        """
+        mkdir -p {wildcards.download_dir}
+        {params.token}
+        curl -fL --retry 5 \
+          -H "X-Dataverse-key: $token" \
+          -o {output} \
+          {DATAVERSE_BASE_URL}/{params.file_id}
+        """
+
+
+rule verify_archives:
+    input:
+        checksums=str(CHECKSUM_FILE),
+        archives=ARCHIVE_DOWNLOADS
+    output:
+        touch(str(CHECKSUM_SENTINEL))
+    shell:
+        """
+        cd {DOWNLOAD_DIR}
+        sha256sum -c {CHECKSUM_FILE.name}
+        """
+
+
+rule metadata:
+    input:
+        str(FILES["metadata"]["download"])
+    output:
+        str(METADATA_FILE)
+    shell:
+        """
+        mkdir -p {METADATA_DIR}
+        cp {input} {output}
+        """
+
+
+rule extract_gopro:
+    input:
+        archive=str(FILES["gopro"]["download"]),
+        verified=str(CHECKSUM_SENTINEL)
+    output:
+        touch(str(GOPRO_SENTINEL))
+    shell:
+        """
+        mkdir -p {GOPRO_DIR}
+        7z x -y -o{GOPRO_DIR}/.. {input.archive}  # `/..` not tested
+        """
+
+
+rule extract_wp:
+    input:
+        first_part=str(FILES["wp_001"]["download"]),
+        parts=WP_PARTS,
+        verified=str(CHECKSUM_SENTINEL)
+    output:
+        touch(str(WP_SENTINEL))
+    shell:
+        """
+        mkdir -p {WP_DIR}
+        7z x -y -o{WP_DIR}/.. {input.first_part}  # `/..` not tested
+        """
