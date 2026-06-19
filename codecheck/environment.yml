@@ -16,4 +16,5 @@ dependencies:
   - requests
   - session-info2
   - ipywidgets
- 
+  - typst
+

@@ -25,5 +25,5 @@ echo "[CODECHECK - Py] $MARKDOWN_FILE found."
 
 # Start Typst compile
 echo "[CODECHECK - Py] Compiling $NOTEBOOK.typ to PDF..."
-typst compile "${NOTEBOOK}.typ"
+typst compile --root .. "${NOTEBOOK}.typ"
 echo "[CODECHECK - Py] Done compiling!"
