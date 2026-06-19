@@ -13,7 +13,18 @@ paper:
 
 repository: https://github.com/tscnlab/TabandehEtAl_iScience_2026
 check_time: "2026-06-15T14:00:00"
-summary: TODO add summary
+summary: |
+  The checked repository includes code to reproduce all figures shown in
+  the associated manuscript titled "Photoreceptor-specific scene
+  statistics reveal melanopic structure in natural environments"
+  including one supplementary figure. The workflow is instructed by a
+  detailed recipe in the file `README.md` and structured into three main
+  parts and small alignment steps. The main parts are downloading the
+  input data and running two notebooks consecutively. Following the
+  instructions successfully produces the manuscript and supplement
+  figures; however, in Figures 1 to 4 structural changes were observed.
+  The code is entirely written in Python allowing to understand the
+  mechanics by reading and uses a transparent repository structure.
 
 codechecker:
   - name: Jan Haacker
