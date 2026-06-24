@@ -1,4 +1,4 @@
-index,Indoor w/ window,Indoor w/ window,Indoor w/ window,Indoor w/ window,Indoor w/ window,Indoor w/ window,Indoor w/o window,Indoor w/o window,Indoor w/o window,Indoor w/o window,Indoor w/o window,Indoor w/o window,Outdoor,Outdoor,Outdoor,Outdoor,Outdoor,Outdoor
+index,Indoor w/ window view,Indoor w/ window view,Indoor w/ window view,Indoor w/ window view,Indoor w/ window view,Indoor w/ window view,Indoor w/o window view,Indoor w/o window view,Indoor w/o window view,Indoor w/o window view,Indoor w/o window view,Indoor w/o window view,Outdoor view,Outdoor view,Outdoor view,Outdoor view,Outdoor view,Outdoor view
 ,mean,std,median,min,max,IQR,mean,std,median,min,max,IQR,mean,std,median,min,max,IQR
 average_radiances_L cones,1.0201,0.1687,2.9079,1.5954,0.2287,2.5755,0.3768,0.1008,2.1204,0.0083,0.0074,0.0004,6.8467,1.7264,10.9462,0.6834,0.1654,3.778
 average_radiances_M cones,0.975,0.1394,2.9978,1.6437,0.167,3.1913,0.3334,0.0783,1.7768,0.0068,0.007,0.0006,8.2032,0.8279,15.7464,0.6957,0.1211,3.7444

@@ -47,8 +47,6 @@ manifest:
     comment: Overall WP central statistics
   - file: results/tables/wp_statistics_per_view.csv
     comment: WP central statistics by view
-  - file: results/tables/Jeti_statistics_per_view.csv
-    comment: JETI summary table by view
   - file: results/tables/overexposed_percentage_per_view.csv
     comment: Overexposed pixels by view
   - file: results/figures/broken_bar_plot_mEDI_logscale_location.png

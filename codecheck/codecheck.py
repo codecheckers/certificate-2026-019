@@ -44,7 +44,7 @@ class Codecheck:
     """
 
     def __init__(self, manifest_file=op.join("..", "codecheck.yml"),
-                 validate=False, strict=False, outputs_dir: Path | str = "outputs"):
+                 validate=False, strict=False):
         """
         Create new `Codecheck` object with optional validation.
 
@@ -62,7 +62,6 @@ class Codecheck:
         self.manifest_file = manifest_file
         self.validator = CodecheckValidator(manifest_file)
         self.manifest_processor = None
-        self.outputs_dir = str(outputs_dir)
 
         # Optionally validate on initialization
         if validate:
@@ -146,7 +145,7 @@ File | Comment | Size (b)
                 + "` | "
                 + entry.get("comment", "")
                 + " | "
-                + str(op.getsize(op.join(self.outputs_dir, entry["file"])))
+                + str(op.getsize(op.join("outputs", entry["file"])))
             )
             for entry in self.conf["manifest"]
         ]
@@ -204,7 +203,7 @@ This certificate confirms that the codechecker could independently reproduce the
             if not fname.endswith(".csv"):
                 continue
             comment = entry.get("comment", None)
-            df = pd.read_csv(op.join(self.outputs_dir, fname), **kwds)
+            df = pd.read_csv(op.join("outputs", fname), **kwds)
             markdown = f"""### `{fname}`
 {('Author comment: *' + comment + '*') if comment else ' '}
 
@@ -238,7 +237,7 @@ This certificate confirms that the codechecker could independently reproduce the
 {('Author comment: *' + comment + '*') if comment else ' '}"""
             full_text.extend(
                 [
-                    heading + r"![" + r"Author comment: " + comment + r"]" + r"(" + self.outputs_dir + r"/" + fname + r")",
+                    heading + r"![" + r"Author comment: " + comment + r"]" + r"(outputs/" + fname + r")",
                     "",
                 ]
             )
