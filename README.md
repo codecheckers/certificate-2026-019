@@ -3,7 +3,7 @@
 # CODECHECK certificate 2026-019
 
 Repository for CODECHECK certificate 2026-019. It is forked from author's [code repository](https://github.com/tscnlab/TabandehEtAl_iScience_2026) associated with the publication.<br>
-Report: https://zenodo.org/records/21238767/
+Report: https://doi.org/10.5281/zenodo.21238767
 
 ## Summary
 
