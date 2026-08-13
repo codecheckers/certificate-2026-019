@@ -28,8 +28,8 @@ summary: |
   mechanics by reading and uses a transparent repository structure.
 
 codechecker:
-  name: Jan Haacker
-  ORCID: 0000-0002-5464-2442
+  - name: Jan Haacker
+    ORCID: 0000-0002-5464-2442
 
 manifest:
   - file: results/tables/merged_wp_jeti_metadata_df.csv
